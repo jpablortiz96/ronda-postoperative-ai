@@ -179,7 +179,7 @@ verificar contra el código.
 ### 1. Clona el repositorio
 
 ```powershell
-git clone https://github.com/<usuario>/ronda-postoperative-ai.git
+git clone https://github.com/jpablortiz96/ronda-postoperative-ai.git
 cd ronda-postoperative-ai
 ```
 
