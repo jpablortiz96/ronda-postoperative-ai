@@ -711,8 +711,13 @@ function alFinal(c) {
   return c.scrollHeight - c.scrollTop - c.clientHeight < MARGEN_FONDO;
 }
 
-function icono(id, clase) {
-  return `<svg class="${clase || ""}"><use href="#${id}"/></svg>`;
+/* Los iconos llevan SIEMPRE tamaño propio. Un <svg> sin width/height y sin
+   regla CSS que lo dimensione se dibuja a 300×150 —el tamaño por defecto de un
+   elemento reemplazado—, que es exactamente como salía el escudo del panel de
+   evidencia: ocupando media columna. */
+function icono(id, clase, px) {
+  const s = px || 15;
+  return `<svg class="${clase || ""}" width="${s}" height="${s}"><use href="#${id}"/></svg>`;
 }
 
 /* ── Conversación ────────────────────────────────────────────────────── */

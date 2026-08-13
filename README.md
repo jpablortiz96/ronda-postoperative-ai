@@ -17,26 +17,13 @@ Voz en tiempo real · Triaje auditable · Conocimiento clínico vivo · Decision
 ![Pruebas](https://img.shields.io/badge/pruebas-533%20passing-35C98A)
 
 [▶ Ver video demo](https://youtu.be/4vaptuQEiQQ) ·
-[📄 Informe final](docs/INFORME_FINAL.md) ·
-[🏗 Ver arquitectura](docs/DIAGRAMA.md) ·
-[🌐 Sitio del proyecto](https://ronda-ten.vercel.app)
+[🌐 Sitio web](https://ronda-ten.vercel.app) ·
+[📄 Informe técnico](docs/INFORME_FINAL.md) ·
+[🏗 Arquitectura](docs/DIAGRAMA.md)
 
 </div>
 
-![Pantalla de llamada de RONDA](docs/assets/ronda-llamada.png)
-
-<div align="center">
-
-### Video demostración
-
-Llamada de voz real, caso rojo con escalamiento, trazabilidad de la evidencia,
-y el conocimiento aprendiendo y olvidando en vivo.
-
-[![Ver la demostración de RONDA en YouTube](https://img.youtube.com/vi/4vaptuQEiQQ/maxresdefault.jpg)](https://youtu.be/4vaptuQEiQQ)
-
-**[▶ Ver demostración completa en YouTube](https://youtu.be/4vaptuQEiQQ)**
-
-</div>
+![RONDA — Seguimiento postoperatorio inteligente](docs/assets/ronda-hero.png)
 
 ---
 
@@ -79,6 +66,52 @@ Un paciente que no contesta a nada **no es un paciente verde**. Es un paciente
 sin evaluar, y eso es una conclusión distinta que exige una acción distinta.
 
 ---
+
+## RONDA en acción
+
+Una conversación de voz puede pasar de un seguimiento rutinario a una escalada
+clínica trazable en segundos.
+
+### Detección y escalamiento
+
+![Caso crítico detectado por RONDA](docs/assets/ronda-triaje-rojo.png)
+
+El paciente menciona fiebre alta y falta de aire. El riesgo pasa a **rojo** y la
+acción a **escalar**, con el acta de alerta creada en el mismo turno. Fíjese en
+que **evaluación** sigue marcada como *incompleta*: son tres ejes distintos, y
+uno no contamina a los otros.
+
+## Cada afirmación clínica puede demostrar su origen
+
+![Evidencia trazable en RONDA](docs/assets/ronda-evidencia.png)
+
+Las fuentes no son texto inventado por el modelo. RONDA valida objetos
+`Evidence` contra la versión vigente de la base de conocimiento antes de
+permitir una afirmación clínica: documento, fragmento, `evidence_id`,
+`kb_version`, distancia y SHA-256.
+
+## Conocimiento que aprende — y también olvida
+
+![Conocimiento vivo de RONDA](docs/assets/ronda-conocimiento.png)
+
+```
+SUBIR  →  INDEXAR  →  RESPONDER CON EVIDENCIA  →  ELIMINAR  →  VERIFICAR OLVIDO
+```
+
+Cada cambio del corpus produce una `kb_version` nueva, así que una evidencia
+anterior deja de ser válida automáticamente. La subida es en caliente —sin
+reiniciar el servidor— y el borrado se comprueba: **cero vectores restantes**.
+
+## Operación y supervisión
+
+![Panel de métricas de RONDA](docs/assets/ronda-metricas.png)
+
+Los tres ejes de la decisión, la distribución de riesgo y el sobretriaje, todo
+calculado desde el registro de eventos y las actas de la propia instalación.
+
+![Centro de escalamiento de RONDA](docs/assets/ronda-alertas.png)
+
+Cada alerta conserva la regla exacta que la disparó.
 
 ## ¿Por qué RONDA es diferente?
 
@@ -284,6 +317,17 @@ Para añadir tus propios documentos, entra a <http://localhost:8000/consola>.
 > reproducir experimentos con el motor anterior existe
 > `requirements-legacy-embeddings.txt`.
 
+## Seguridad por diseño
+
+| Principio | Qué garantiza |
+|---|---|
+| **Triaje de doble eje** | El riesgo clínico y la completitud de la evaluación no se mezclan |
+| **Never Downgrade** | Una alarma detectada por reglas no puede ser rebajada por el modelo |
+| **Desconocido ≠ negativo** | La ausencia de respuesta no se interpreta como ausencia de síntoma |
+| **Evidence Gate** | Sin evidencia válida no hay afirmación clínica |
+| **Olvido verificable** | Borrar conocimiento invalida las evidencias que lo citaban |
+| **Modo determinista** | Las alarmas críticas no dependen exclusivamente del modelo de lenguaje |
+
 ## Seguridad clínica
 
 - **El paciente es información, nunca instrucción.** Los intentos de inyección
@@ -310,20 +354,27 @@ evidencias usadas y rechazos de la compuerta.
 Contra el dataset oficial de 160 casos con etiqueta de verdad
 (`verde`/`amarillo`/`rojo`), en modo determinista:
 
-| Resultado | Valor |
-|---|---|
+| Métrica | Resultado |
+|---|---:|
+| Suite de pruebas | **533 PASS / 0 FAIL** |
+| Arranque en sala limpia | **2 min 09 s** |
 | Exactitud global | 75,6 % |
 | **Rojo clasificado como verde** | **0** |
 | **Verde clasificado como rojo** | **0** |
-| Recall de rojo (capa limpia) | 100 % (12/12) |
+| Recall de rojo (capa limpia) | **100 % · 12/12** |
 | Concordancia pareada limpio/ruidoso | 83,3 % |
 | Captura operativa de rojo | 100 % |
+| Latencia P50 | 4014 ms |
+| Latencia P95 | 11 055 ms |
+| Costo estimado por llamada | USD 0,00277 |
 
-**El contrapeso, sin maquillar:** esa captura del 100 % se paga con
-sobretriaje. **111 de 246 conversaciones verdes fueron enviadas a revisión
-humana.** En un servicio real eso es carga de trabajo adicional para
-enfermería. Es una decisión deliberada —preferimos revisar de más a soltar un
-rojo— pero es un coste, no un logro gratuito.
+> **Contrapeso de seguridad:** 111 de 246 conversaciones clínicamente verdes
+> fueron dirigidas a revisión humana.
+
+Esa captura del 100 % de los rojos se paga con sobretriaje. En un servicio real
+eso es carga de trabajo adicional para enfermería. Es una decisión deliberada
+—preferimos revisar de más a soltar un rojo— pero es un coste, no un logro
+gratuito, y por eso aparece aquí y no en una nota al pie.
 
 ## Métricas
 
@@ -390,6 +441,15 @@ Conviene decirlo claro:
   invenciones, pero una abstención sigue siendo una pregunta sin responder.
 - **Depende de proveedores externos** para voz y lenguaje. Sin credenciales
   arranca igual y lo declara, pero funciona en modo degradado.
+
+## Demostración, informe y arquitectura
+
+| Recurso | Enlace |
+|---|---|
+| Video de demostración | **[▶ Ver demostración completa en YouTube](https://youtu.be/4vaptuQEiQQ)** |
+| Sitio del proyecto | [ronda-ten.vercel.app](https://ronda-ten.vercel.app) |
+| Informe técnico completo | [docs/INFORME_FINAL.md](docs/INFORME_FINAL.md) |
+| Diagramas de arquitectura | [docs/DIAGRAMA.md](docs/DIAGRAMA.md) |
 
 ## Licencia
 
