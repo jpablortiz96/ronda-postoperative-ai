@@ -53,8 +53,17 @@ def _pagina(nombre: str) -> HTMLResponse:
     que esa combinación sea imposible de construir.
     """
     html = (STATIC_DIR / nombre).read_text(encoding="utf-8")
-    for asset in ("styles.css", "llamada.js", "consola.js"):
+    for asset in ("styles.css", "panel.css", "llamada.js", "consola.js"):
         html = html.replace(f"/static/{asset}", f"/static/{asset}?v={_sello(asset)}")
+
+    # Los ENLACES entre páginas también se sellan. `no-store` impide guardar
+    # futuras respuestas, pero no desaloja una copia que el navegador ya tenía
+    # de antes —cuando esta página se servía sin Cache-Control—. Sellar la URL
+    # crea una clave de caché nueva, así que la entrada envenenada deja de
+    # usarse sin que nadie tenga que vaciar nada a mano.
+    sello_consola = _sello("consola.html")
+    html = html.replace('href="/consola#', f'href="/consola?v={sello_consola}#')
+    html = html.replace('href="/consola"', f'href="/consola?v={sello_consola}"')
     return HTMLResponse(html, headers={"Cache-Control": "no-store, must-revalidate"})
 
 
@@ -410,6 +419,174 @@ def verificar_olvido(doc_id: str):
 @app.get("/api/alertas")
 def listar_alertas():
     return decision_engine.listar_alertas()
+
+
+def _actas_en_disco() -> list[dict]:
+    """Lee las actas completas del disco.
+
+    `summary.listar_actas()` devuelve un resumen de cinco campos pensado para
+    una lista corta; no trae los tres ejes. Aquí se leen los archivos tal cual
+    quedaron escritos. Es lectura pura: no recalcula ni reinterpreta nada.
+    """
+    carpeta = Path(__file__).parent.parent / "data" / "actas"
+    salida: list[dict] = []
+    try:
+        rutas = sorted(carpeta.glob("*.json"))
+    except OSError:
+        return salida
+    for r in rutas:
+        try:
+            salida.append(json.loads(r.read_text(encoding="utf-8")))
+        except (OSError, ValueError):
+            continue
+    return salida
+
+
+@app.get("/api/actas-resumen")
+def actas_resumen():
+    """Listado enriquecido para el panel: incluye los tres ejes de la decisión.
+
+    Endpoint aparte a propósito: `/api/actas` conserva su forma original para
+    no romper a nadie que ya dependa de ella.
+    """
+    filas = []
+    for a in _actas_en_disco():
+        p = a.get("paciente")
+        nombre = p.get("nombre") if isinstance(p, dict) else p
+        filas.append({
+            "session_id": a.get("session_id"),
+            "inicio": a.get("inicio"),
+            "fin": a.get("fin"),
+            "paciente": nombre,
+            "procedimiento": (p.get("procedimiento") if isinstance(p, dict) else None),
+            "criticidad_final": a.get("criticidad_final") or a.get("criticidad_clinica"),
+            "evaluacion": ((a.get("evaluacion") or {}).get("estado")
+                           if isinstance(a.get("evaluacion"), dict)
+                           else a.get("evaluacion")) or a.get("estado_evaluacion"),
+            "accion_operativa": a.get("accion_operativa"),
+            "escalado": (a.get("decision") or {}).get("escalado", a.get("escalado")),
+            "referencias": len(a.get("referencias_usadas") or []),
+        })
+    filas.sort(key=lambda f: f.get("fin") or "", reverse=True)
+    return filas
+
+
+@app.get("/api/metricas")
+def metricas_agregadas():
+    """Agregación de solo lectura para el panel de métricas.
+
+    NO calcula nada clínico: cuenta lo que las actas, las alertas y el registro
+    de eventos YA dejaron escrito. Si un dato no existe, no se inventa: se
+    devuelve `null` y la interfaz muestra un vacío honesto.
+    """
+    from .rag import store
+
+    # Actas COMPLETAS: el listado resumido no trae los tres ejes.
+    actas = _actas_en_disco()
+    alertas = decision_engine.listar_alertas() or []
+    if isinstance(alertas, dict):
+        alertas = alertas.get("alertas", [])
+
+    def _cuenta(items, clave, valores):
+        out = {v: 0 for v in valores}
+        for it in items:
+            v = (it or {}).get(clave)
+            if v in out:
+                out[v] += 1
+        return out
+
+    # ── Latencias y consumo, desde el registro de eventos ────────────────────
+    latencias: list[float] = []
+    tokens_in = tokens_out = turnos = 0
+    consultas_rag = 0
+    sesiones: set[str] = set()
+    ruta = Path(observability.LOG_PATH) if hasattr(observability, "LOG_PATH") else \
+        Path(__file__).parent.parent / "logs" / "events.jsonl"
+    try:
+        with open(ruta, encoding="utf-8") as fh:
+            for linea in fh:
+                try:
+                    e = json.loads(linea)
+                except (ValueError, TypeError):
+                    continue
+                if e.get("tipo") == "turno":
+                    turnos += 1
+                    if e.get("session_id"):
+                        sesiones.add(e["session_id"])
+                    ms = e.get("servidor_a_primer_audio_ms")
+                    if isinstance(ms, (int, float)) and ms > 0:
+                        latencias.append(float(ms))
+                    tokens_in += int(e.get("tokens_entrada") or 0)
+                    tokens_out += int(e.get("tokens_salida") or 0)
+                if e.get("tipo") in ("turno_rag", "routing"):
+                    consultas_rag += int(e.get("rag_queries_count") or 0)
+    except OSError:
+        pass
+
+    def _pct(datos, p):
+        if not datos:
+            return None
+        orden = sorted(datos)
+        i = min(int(round((p / 100) * (len(orden) - 1))), len(orden) - 1)
+        return round(orden[i])
+
+    riesgo = _cuenta(actas, "criticidad_final", ("verde", "amarillo", "rojo"))
+    # `decision.accion_operativa` vive dentro del bloque de decisión del acta.
+    acciones = {"continuar": 0, "repreguntar": 0, "revision_humana": 0, "escalar": 0}
+    evaluacion = {"completa": 0, "incompleta": 0, "fallida": 0}
+    # Los tres ejes viven en la raíz del acta (`accion_operativa`, `evaluacion`),
+    # no dentro del bloque `decision`, que guarda la trazabilidad por turno.
+    for a in actas:
+        acc = a.get("accion_operativa")
+        if acc in acciones:
+            acciones[acc] += 1
+        # `evaluacion` se guarda como objeto con su propio detalle; el eje
+        # es su campo `estado`. Se aceptan ambas formas por compatibilidad.
+        ev = a.get("evaluacion")
+        if isinstance(ev, dict):
+            ev = ev.get("estado")
+        ev = ev or a.get("estado_evaluacion")
+        if ev in evaluacion:
+            evaluacion[ev] += 1
+
+    verdes = riesgo.get("verde", 0)
+    a_revision = sum(1 for a in actas
+                     if a.get("criticidad_final") == "verde"
+                     and a.get("accion_operativa") in ("revision_humana", "escalar"))
+
+    return {
+        "llamadas": len(actas),
+        "turnos": turnos or None,
+        "sesiones_con_eventos": len(sesiones) or None,
+        "latencia_p50_ms": _pct(latencias, 50),
+        "latencia_p95_ms": _pct(latencias, 95),
+        "latencias_muestra": len(latencias),
+        "tokens_entrada_total": tokens_in or None,
+        "tokens_salida_total": tokens_out or None,
+        "tokens_entrada_por_turno": round(tokens_in / turnos, 1) if turnos else None,
+        "tokens_salida_por_turno": round(tokens_out / turnos, 1) if turnos else None,
+        "consultas_rag": consultas_rag or None,
+        "consultas_rag_por_llamada": (round(consultas_rag / len(actas), 2)
+                                      if actas else None),
+        "riesgo": riesgo,
+        "acciones": acciones,
+        "evaluacion": evaluacion,
+        "alertas_total": len(alertas),
+        "alertas_rojas": sum(1 for a in alertas if (a or {}).get("nivel") == "rojo"),
+        "verdes_a_revision": a_revision,
+        "verdes_total": verdes,
+        "documentos_activos": len(ingest.list_documents()),
+        "vectores": store.collection_count(),
+        # Cifra del benchmark documentado en el informe. Se marca como tal para
+        # que la interfaz nunca la confunda con la operación de esta máquina.
+        "benchmark": {
+            "fuente": "Evaluación sobre dataset sintético etiquetado (160 casos)",
+            "verdes_a_revision": 111,
+            "verdes_total": 246,
+            "recall_rojo": "100 % (12/12)",
+            "rojo_a_verde": 0,
+        },
+    }
 
 
 @app.get("/api/actas")

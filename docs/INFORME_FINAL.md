@@ -394,6 +394,14 @@ Resumen de los tipos de instrucción que guiaron el desarrollo:
 6. **Entrega.** «Sala limpia real, cronometrar el arranque, auditar secretos,
    no maquillar métricas y reportar los bloqueantes aunque impliquen FAIL.»
 
+## 21 bis. Demostración en video
+
+La demostración completa —llamada de voz real, caso rojo con escalamiento,
+trazabilidad de la evidencia, y el ciclo de conocimiento vivo aprendiendo y
+olvidando— está publicada en:
+
+**https://youtu.be/4vaptuQEiQQ**
+
 ## 22. Conclusiones
 
 RONDA demuestra que un agente de voz clínico puede ser **auditable por

@@ -16,15 +16,27 @@ Voz en tiempo real · Triaje auditable · Conocimiento clínico vivo · Decision
 ![Licencia](https://img.shields.io/badge/licencia-MIT-35C98A)
 ![Pruebas](https://img.shields.io/badge/pruebas-533%20passing-35C98A)
 
-[▶ Ver video demo](VIDEO_URL_PENDING) ·
+[▶ Ver video demo](https://youtu.be/4vaptuQEiQQ) ·
 [📄 Informe final](docs/INFORME_FINAL.md) ·
-[🏗 Arquitectura](docs/DIAGRAMA.md) ·
-[🌐 Sitio del proyecto](https://ronda-ten.vercel.app) ·
-[✅ Checklist de entrega](docs/RELEASE_CHECKLIST.md)
+[🏗 Ver arquitectura](docs/DIAGRAMA.md) ·
+[🌐 Sitio del proyecto](https://ronda-ten.vercel.app)
 
 </div>
 
 ![Pantalla de llamada de RONDA](docs/assets/ronda-llamada.png)
+
+<div align="center">
+
+### Video demostración
+
+Llamada de voz real, caso rojo con escalamiento, trazabilidad de la evidencia,
+y el conocimiento aprendiendo y olvidando en vivo.
+
+[![Ver la demostración de RONDA en YouTube](https://img.youtube.com/vi/4vaptuQEiQQ/maxresdefault.jpg)](https://youtu.be/4vaptuQEiQQ)
+
+**[▶ Ver demostración completa en YouTube](https://youtu.be/4vaptuQEiQQ)**
+
+</div>
 
 ---
 

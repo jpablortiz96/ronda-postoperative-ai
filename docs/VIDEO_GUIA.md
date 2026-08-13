@@ -1,4 +1,9 @@
-# Guía para grabar el video — RONDA
+# Guía del video — RONDA
+
+> **Video final publicado:** https://youtu.be/4vaptuQEiQQ
+
+Este documento se conserva como registro del proceso: es el guion con
+el que se grabó la demostración.
 
 Material de apoyo para la grabación. Duración objetivo: **5–7 minutos**.
 
@@ -175,8 +180,6 @@ cualquier cambio tiene que demostrar que no lo altera.
 
 ---
 
-## Después de grabar
+## Resultado
 
-- [ ] Subir el video y copiar la URL
-- [ ] Sustituir `VIDEO_URL_PENDING` en `README.md`
-- [ ] Marcar el video en [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md)
+Video publicado: **https://youtu.be/4vaptuQEiQQ**
