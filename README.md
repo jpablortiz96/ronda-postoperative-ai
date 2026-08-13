@@ -19,6 +19,7 @@ Voz en tiempo real · Triaje auditable · Conocimiento clínico vivo · Decision
 [▶ Ver video demo](VIDEO_URL_PENDING) ·
 [📄 Informe final](docs/INFORME_FINAL.md) ·
 [🏗 Arquitectura](docs/DIAGRAMA.md) ·
+[🌐 Sitio del proyecto](https://ronda-ten.vercel.app) ·
 [✅ Checklist de entrega](docs/RELEASE_CHECKLIST.md)
 
 </div>
