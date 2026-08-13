@@ -1,0 +1,26 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+# Requerido por FastAPI para el multipart/form-data de POST /api/docs.
+# Sin él, importar app.main aborta antes de arrancar el servidor.
+python-multipart==0.0.20
+python-dotenv==1.0.1
+groq==0.13.1
+httpx==0.28.1
+# 7.0.0 recibe HTTP 403 en el handshake WebSocket de síntesis: envía un
+# Sec-MS-GEC-Version que el servicio ya rechaza. 7.2.8 actualiza ese token.
+edge-tts==7.2.8
+# 1.x elimina la dependencia de chroma-hnswlib (extensión C++ sin wheel para
+# Python 3.12/3.13 en Windows: exigía Visual Studio Build Tools para instalar).
+# Instala 100% desde wheels binarios en Windows/Linux/macOS.
+chromadb==1.5.9
+# Embeddings sobre ONNX Runtime — que chromadb ya instala— en lugar de
+# sentence-transformers, que arrastra PyTorch. Es EL MISMO modelo
+# (paraphrase-multilingual-MiniLM-L12-v2, 384 dim): la similitud coseno entre
+# ambos motores es 0.999999. Ahorra ~750 MB de descarga y es la diferencia
+# entre cumplir la compuerta de 15 minutos y no cumplirla.
+# Para reproducir experimentos con el motor anterior: requirements-legacy-embeddings.txt
+fastembed==0.8.0
+pypdf==5.1.0
+PyYAML==6.0.2
+pandas==2.2.3
+openpyxl==3.1.5

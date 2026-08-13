@@ -1,0 +1,13 @@
+{
+  "generado": "2026-08-12T16:21:20.744556+00:00",
+  "archivos": {
+    "config/red_flags.yaml": "97e2beefe34cc5ad69fd264e87ee7364deb9f38e0db9e6d319b082b48b484501",
+    "app/decision/rules.py": "23b61963b72e86a340eb6959273e485f2f8214e9b7e12846220cf0a8dda01b66",
+    "app/decision/engine.py": "45ec0f70ff452e4e1867107a0e80217ae121a37abb488c8c30036ce03db72970",
+    "app/decision/composicion.py": "006312e7dfd9e70dbbf808547612470dcfe2efe0cc6a311c182b072e2726d95a",
+    "app/decision/cobertura.py": "eeaeb6f02adf08e33877b0b6c8699b2f1504eb918b96ebe4d78444264509dc8d",
+    "app/decision/assess.py": "0074bc1405cd6f751e831c4d28cf39521f332240340b00bffe823a58bb613545",
+    "app/llm.py": "0fbd8a76d00a012de460c57edc8814ceba4cb11902cd76c46cce2786175e586d"
+  },
+  "huella_motor": "fe10b939a94b84bf"
+}

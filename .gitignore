@@ -1,0 +1,72 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# RONDA · qué NO entra en el repositorio
+#
+# Criterio: entra el CÓDIGO y la CONFIGURACIÓN que el producto necesita para
+# arrancar. No entra nada que el sistema genere por sí mismo al ejecutarse, ni
+# nada privado. Si un archivo se puede reconstruir arrancando la aplicación,
+# es un artefacto de ejecución y va fuera.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Credenciales ─────────────────────────────────────────────────────────────
+# `.env.example` SÍ se versiona: es la plantilla. `.env` jamás.
+.env
+.env.local
+*.pem
+*.key
+
+# ── Entornos e intérprete ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Artefactos de ejecución ──────────────────────────────────────────────────
+# El índice vectorial se reconstruye al ingerir; el manifiesto nace con él.
+data/chroma/
+data/manifest.json
+# Documentos subidos por el usuario en tiempo de ejecución.
+data/uploads/*
+# Modelo de embeddings: se descarga solo en el primer arranque (~60 MB).
+data/models/
+# Actas y alertas: son historia clínica sintética de ESTA máquina, no producto.
+data/actas/*.json
+data/alertas/*.json
+# Registro de eventos: fuente de las métricas, generado al hablar.
+logs/*.jsonl
+logs/runtime/
+
+# Se conservan las carpetas vacías para que el árbol arranque sin crearlas.
+!data/**/.gitkeep
+!logs/.gitkeep
+
+# ── Resultados de evaluación ─────────────────────────────────────────────────
+# Son la salida de una corrida concreta, no código. `eval/huellas_motor.json`
+# SÍ se versiona: identifica qué motor produjo cada benchmark del informe.
+eval/ultimo_resultado.json
+eval/*.jsonl
+eval/ckpt*.jsonl
+
+# ── Material privado de desarrollo ───────────────────────────────────────────
+CLAUDE.md
+.claude/
+scratch/
+scratchpad/
+capturas/
+screenshots/
+*.screenshot.png
+
+# ── Documento de verificación de conocimiento vivo ───────────────────────────
+# Se genera al vuelo cuando se demuestra G5; no se versiona.
+G5-DEMO-UNICO.txt
+
+# ── Sistema operativo / editor ───────────────────────────────────────────────
+Thumbs.db
+.DS_Store
+desktop.ini
+.idea/
+.vscode/

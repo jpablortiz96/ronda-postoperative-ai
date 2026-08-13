@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RONDA · Seguimiento postoperatorio</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<!-- Iconografía: SVG en línea, dibujada aquí. Ninguna librería externa. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-overview" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></symbol>
+    <symbol id="i-call" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 7v6M16 7v6M5 10v1M19 10v1M12 17v4M9 21h6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h7M8 11h7"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l8 15H4z"/><path d="M12 10v4M12 17h.01"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l8 15H4z"/><path d="M12 10v4M12 17h.01"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <!-- ══ Barra lateral ══════════════════════════════════════════════ -->
+  <aside class="lateral">
+    <div class="marca">
+      <div class="marca-logo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#04121F" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v18M5 8v8M19 8v8"/></svg>
+      </div>
+      <div class="marca-txt">
+        <span class="marca-nombre">RONDA</span>
+        <span class="marca-lema">Postoperative Intelligence</span>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Navegación principal">
+      <div class="nav-grupo">Operación</div>
+      <a href="/" aria-current="page"><svg class="nav-icono" width="18" height="18"><use href="#i-call"/></svg><span>Llamada</span></a>
+      <a href="/consola"><svg class="nav-icono" width="18" height="18"><use href="#i-book"/></svg><span>Conocimiento</span></a>
+      <div class="nav-grupo">Supervisión</div>
+      <a href="#" aria-disabled="true" tabindex="-1" title="Próximo checkpoint"><svg class="nav-icono" width="18" height="18"><use href="#i-alert"/></svg><span>Alertas</span></a>
+      <a href="#" aria-disabled="true" tabindex="-1" title="Próximo checkpoint"><svg class="nav-icono" width="18" height="18"><use href="#i-doc"/></svg><span>Actas</span></a>
+      <a href="#" aria-disabled="true" tabindex="-1" title="Próximo checkpoint"><svg class="nav-icono" width="18" height="18"><use href="#i-chart"/></svg><span>Métricas</span></a>
+    </nav>
+
+    <div class="lateral-pie">
+      Datos sintéticos.<br />Esta demostración no presta servicio clínico real.
+    </div>
+  </aside>
+
+  <!-- ══ Área principal ═════════════════════════════════════════════ -->
+  <div class="principal">
+    <header class="topbar">
+      <h1>Llamada</h1>
+      <span class="miga">Seguimiento postoperatorio</span>
+
+      <div class="salud">
+        <div class="salud-grupo">
+          <span class="salud-item" id="sSTT" data-e="desconocido"><i></i>STT</span>
+          <span class="salud-item" id="sLLM" data-e="desconocido"><i></i>LLM</span>
+          <span class="salud-item" id="sTTS" data-e="desconocido"><i></i>TTS</span>
+          <span class="salud-item" id="sRAG" data-e="desconocido"><i></i>RAG</span>
+        </div>
+        <span class="kb-chip" id="chipKb" title="Versión del conocimiento activo">KB <b>—</b></span>
+      </div>
+    </header>
+
+    <main class="lienzo">
+      <div class="lienzo-ancho">
+
+        <!-- Cabecera de sesión: solo con llamada activa -->
+        <div class="hero-sesion" id="heroSesion" hidden>
+          <div>
+            <div class="eyebrow">Seguimiento postoperatorio</div>
+            <div class="nombre" id="hsNombre">—</div>
+            <div class="meta" id="hsMeta">—</div>
+          </div>
+          <div class="der">
+            <div class="hero-dato">
+              <div class="v" id="hsVoz">—</div>
+              <div class="k">Voz</div>
+            </div>
+            <span class="pill-vivo" id="hsEstado" data-on="false"><i></i><span id="hsEstadoTxt">Inactiva</span></span>
+          </div>
+        </div>
+
+        <div class="trabajo">
+          <!-- ══ Espacio de conversación ══════════════════════════ -->
+          <div class="col">
+            <section class="panel panel-conv" aria-labelledby="tConv">
+              <div class="panel-cab">
+                <div>
+                  <h2 id="tConv">Conversación en vivo</h2>
+                  <div class="sub">Seguimiento automático · voz bidireccional</div>
+                </div>
+              </div>
+
+              <div id="transcript" class="transcript" role="log" aria-live="polite"
+                   aria-label="Transcripción de la llamada">
+                <!-- Estado inicial: no un vacío, una portada -->
+                <div class="idle" id="idle">
+                  <div class="orbe"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v18M5 8v8M19 8v8"/></svg></div>
+                  <h2>Seguimiento postoperatorio inteligente</h2>
+                  <p>Conversación de voz, triaje auditable y conocimiento clínico vivo.</p>
+                  <div class="idle-paciente" id="idlePaciente">
+                    <div>
+                      <div class="n" id="ipNombre">—</div>
+                      <div class="m" id="ipMeta">Cargando paciente…</div>
+                    </div>
+                  </div>
+                  <button class="btn-1 btn-lg" id="btnIniciar">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 3l14 9-14 9z"/></svg>
+                    Iniciar seguimiento
+                  </button>
+                  <div class="insignias">
+                    <span class="insignia"><svg width="13" height="13"><use href="#i-mic"/></svg>Voz lista</span>
+                    <span class="insignia"><svg width="13" height="13"><use href="#i-shield"/></svg>Evidence Gate</span>
+                    <span class="insignia"><svg width="13" height="13"><use href="#i-spark"/></svg>Triaje auditable</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dock" id="dock" data-e="inactivo">
+                <div class="mic"><svg width="17" height="17"><use href="#i-mic"/></svg></div>
+                <div class="dock-txt">
+                  <span class="dock-estado" id="dockEstado" role="status">Micrófono inactivo</span>
+                  <span class="dock-voz" id="dockVoz"></span>
+                </div>
+                <div class="dock-acciones">
+                  <button id="btnFinalizar" class="btn-danger" disabled>Finalizar llamada</button>
+                </div>
+              </div>
+            </section>
+
+            <div id="avisos" aria-live="polite" style="display:flex;flex-direction:column;gap:10px"></div>
+          </div>
+
+          <!-- ══ Carril de inteligencia clínica ═══════════════════ -->
+          <div class="col">
+            <section class="panel" aria-labelledby="tDec">
+              <div class="panel-cab"><h2 id="tDec">Decisión clínica</h2></div>
+              <div class="decision" id="decision" data-riesgo="verde">
+                <div class="decision-fila">
+                  <span class="decision-k">Riesgo</span>
+                  <span class="faro" aria-hidden="true"></span>
+                  <div>
+                    <div class="decision-v" id="dRiesgo">Verde</div>
+                    <div class="decision-d" id="dRiesgoDet">Sin señales de alarma</div>
+                  </div>
+                </div>
+                <div class="decision-fila">
+                  <span class="decision-k">Evaluación</span>
+                  <div>
+                    <span class="marca-est" id="dEval" data-v="completa">Completa</span>
+                    <div class="decision-d" id="dEvalDet"></div>
+                  </div>
+                </div>
+                <div class="decision-fila">
+                  <span class="decision-k">Acción</span>
+                  <span class="marca-est" id="dAccion" data-v="continuar">Continuar seguimiento</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="tCob">
+              <div class="panel-cab"><h2 id="tCob">Cobertura de la entrevista</h2></div>
+              <div class="panel-cuerpo">
+                <div class="cobertura" id="cobertura">
+                  <div class="vacio" style="padding:14px 0">
+                    <span class="d">Sin datos hasta iniciar el seguimiento.</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="tPac">
+              <div class="panel-cab"><h2 id="tPac">Paciente</h2></div>
+              <div class="panel-cuerpo" id="fichaPaciente">
+                <div class="pac-fila"><span class="pac-v" style="color:var(--faint)">Sin llamada activa</span></div>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="tMet">
+              <div class="panel-cab"><h2 id="tMet">Sesión</h2></div>
+              <div class="panel-cuerpo">
+                <div class="kpis">
+                  <div class="kpi"><div class="v" id="mLatencia">—</div><div class="k">Latencia</div></div>
+                  <div class="kpi"><div class="v" id="mTurnos">0</div><div class="k">Turnos</div></div>
+                  <div class="kpi"><div class="v" id="mFuentes">0</div><div class="k">Fuentes</div></div>
+                </div>
+                <details class="tec">
+                  <summary>Detalles técnicos</summary>
+                  <dl class="tec-tabla" id="tecTabla"></dl>
+                </details>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ Drawer de evidencia ══════════════════════════════════════════ -->
+<div class="velo" id="velo"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitulo" aria-hidden="true">
+  <div class="drawer-cab">
+    <svg width="16" height="16" style="color:var(--accent-2)"><use href="#i-doc"/></svg>
+    <h3 id="drTitulo">Fuente de evidencia</h3>
+    <button class="btn-icono" id="drCerrar" aria-label="Cerrar" style="margin-left:auto">
+      <svg width="16" height="16"><use href="#i-close"/></svg>
+    </button>
+  </div>
+  <div class="drawer-cuerpo" id="drCuerpo"></div>
+</aside>
+
+<dialog id="dlgResumen" aria-labelledby="tActa">
+  <h2 id="tActa" style="margin:0 0 12px;font-size:16px;">Acta de la llamada</h2>
+  <pre class="json" id="resumenJson"></pre>
+  <div style="display:flex;gap:8px;padding-top:14px;">
+    <button class="btn-2" id="btnCerrarActa">Cerrar</button>
+  </div>
+</dialog>
+
+<script src="/static/llamada.js"></script>
+</body>
+</html>

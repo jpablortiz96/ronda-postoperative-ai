@@ -1,0 +1,347 @@
+﻿# Banderas de criticidad deterministas de RONDA (Carril A del motor de decisión)
+# Los patrones son regex insensibles a tildes/mayúsculas (se normalizan).
+# Este archivo es editable por personal clínico sin tocar código.
+#
+# DOS CAMPOS DE TEXTO, DOS AUDIENCIAS DISTINTAS:
+#   descripcion       → INTERNA. Va al acta, la alerta y la auditoría clínica.
+#                       Puede (y debe) usar lenguaje diagnóstico. NUNCA se pronuncia.
+#   mensaje_paciente  → Lo ÚNICO que el agente puede decir en voz alta al describir
+#                       la señal. Debe nombrar lo que el paciente contó, sin
+#                       diagnosticar ni alarmar. Si falta, el agente omite la
+#                       mención en lugar de improvisar.
+#
+# ADVERTENCIA DE ALCANCE: umbrales y patrones de referencia para el reto,
+# derivados de guías generales de cuidado postoperatorio. Antes de cualquier
+# uso real deben ser validados por personal clínico.
+
+umbrales:
+  fiebre_amarillo_c: 38.0
+  fiebre_rojo_c: 39.0
+  dolor_amarillo: 6
+  dolor_rojo: 8
+
+global:
+  - id: dolor_toracico
+    nivel: rojo
+    descripcion: Dolor torácico postoperatorio — descartar evento cardiaco o TEP
+    mensaje_paciente: esa molestia en el pecho
+    patrones:
+      - "dolor.{0,20}(pecho|torax|toracic)"
+      - "(pecho|torax).{0,20}(duele|dolor|apretad|oprim)"
+      - "me aprieta el pecho"
+      - "(me |le )?(duele|dolia|duelen).{0,15}(el |la )?(pecho|torax|pechera)"
+      - "(opresion|apret|aprieta|presion|peso|oprim).{0,25}(en el |el |me el )?pecho"
+      - "pecho.{0,20}(apretado|oprimido|cerrado)"
+      - "me siento.{0,20}apretado.{0,15}pecho"
+
+  - id: dificultad_respiratoria
+    nivel: rojo
+    descripcion: Dificultad para respirar
+    mensaje_paciente: que le cueste respirar
+    patrones:
+      - "(no puedo|me cuesta|dificultad).{0,20}respirar"
+      - "me ahogo|ahogad|falta de aire|sin aire"
+      - "respiro (mal|raro|con dificultad)"
+      - "me falta(ba)? (el |la )?(aire|respiracion)"
+      - "falta.{0,10}(de |el )?aire"
+      - "no me entra (el )?aire"
+      - "me (estoy |esta )?(asfixi|sofoc)"
+      - "(cuesta|costando|cuesta trabajo|dificil|dificultad).{0,25}(respirar|respiracion|coger aire|tomar aire)"
+      - "me agito.{0,20}(mucho|rapido|facil)"
+      - "respirando (mal|con dificultad)"
+      - "no alcanzo a (respirar|coger aire)"
+
+  - id: sangrado_activo
+    nivel: rojo
+    descripcion: Sangrado activo o abundante de la herida
+    mensaje_paciente: ese sangrado
+    patrones:
+      - "(sangra|sangrando|sangrado).{0,30}(mucho|abundante|no para|sin parar|chorro)"
+      - "(mucha|bastante|harta) sangre"
+      - "empapad[oa].{0,15}sangre"
+      - "la venda.{0,20}(empapada|llena de sangre)"
+      - "(botando|saliendo|sale|sali[oe]).{0,25}sangre"
+      - "(herida|venda|puntos|apostito).{0,30}(sangra|sangrando|con sangre)"
+      - "sangra.{0,20}(la herida|los puntos|bastante|feo)"
+      - "no (me |se )?(para|detiene) (el |la )?sangr"
+
+  - id: perdida_conciencia
+    nivel: rojo
+    descripcion: Desmayo, pérdida de conciencia o confusión severa
+    mensaje_paciente: ese desmayo
+    patrones:
+      - "me desmaye|se desmayo|perdi el conocimiento"
+      - "no (me )?responde|no reacciona"
+      - "(muy )?confundid[oa]|no sabe donde esta"
+      - "me dio un (desmayo|desvanecimiento|patatus|yeyo)"
+      - "me (desmaye|desvaneci|desvanecio)"
+      - "me puse a punto de desmayar"
+      - "perdi (el sentido|el conocimiento|la conciencia)"
+
+  - id: signos_septicos
+    nivel: rojo
+    descripcion: Combinación de fiebre alta con escalofríos o deterioro general
+    mensaje_paciente: esa fiebre con escalofríos
+    # Lo que se eliminó aquí fue el patrón de escalofrío AISLADO: no figura
+    # como signo de alarma en ningún plan de cuidado del corpus y aparece en el
+    # 37% de las conversaciones verdes ("me tomé la temperatura, 36.2, y he
+    # sentido escalofrío"). La combinación fiebre + escalofríos SÍ se conserva
+    # en rojo: es el par que sugiere bacteriemia. Cada patrón exige, por tanto,
+    # o la palabra fiebre, o una cifra ≥38 — nunca el temblor por su cuenta.
+    patrones:
+      - '(fiebre|calentura|febril).{0,40}(escalofrio|tirit|temblando|temblor)'
+      - '(escalofrio|tirit|temblando|temblor).{0,40}(fiebre|calentura|febril)'
+      - '(3[89]|4[01])([.,][0-9])?\s*(grados|.c).{0,40}(escalofrio|tirit|temblando|temblor)'
+      - '(escalofrio|tirit|temblando|temblor).{0,40}(3[89]|4[01])([.,][0-9])?\s*(grados|.c)'
+
+  - id: dehiscencia
+    nivel: rojo
+    descripcion: Apertura de la herida quirúrgica
+    mensaje_paciente: cómo está la herida
+    patrones:
+      - "(herida|puntos|cicatriz).{0,30}(se abrio|abierta|se solto|se soltaron|se reventaron)"
+      - "se me (abrio|solto|reventaron) (la herida|los puntos)"
+      - "se (me )?sale (algo|una tripa|el intestino)"
+      - "(se me |se )?(abrio|abrieron|solto|soltaron|reventaron|reventó).{0,20}(la herida|los puntos|el corte)"
+      - "(herida|puntos|corte).{0,25}(abierta|abierto|separad|reventad)"
+
+  - id: infeccion_herida
+    nivel: amarillo
+    descripcion: Signos de infección en la herida (pus, mal olor, enrojecimiento caliente)
+    patrones:
+      - "pus|material amarillo|liquido amarillo|secrecion"
+      - "(herida|cicatriz).{0,30}(huele (mal|feo)|mal olor|hedionda)"
+      - "(herida|alrededor).{0,30}(roja y caliente|caliente|muy roja|hinchad)"
+
+  - id: fiebre_reportada
+    nivel: amarillo
+    descripcion: Fiebre o sensación febril reportada sin cifra
+    patrones:
+      - "fiebre|calentura|febril"
+      - "me siento (caliente|con temperatura)"
+
+  - id: vomito_persistente
+    nivel: amarillo
+    descripcion: Vómito repetido o incapacidad de retener líquidos
+    patrones:
+      - "(vomito|vomitando|trasboco|trasbocando).{0,30}(varias veces|todo el dia|no paro|otra vez)"
+      - "no (retengo|me pasa) (nada|ni el agua|la comida)"
+      - "devuelvo todo"
+
+  - id: no_orina
+    nivel: amarillo
+    descripcion: Retención urinaria o ausencia de diuresis
+    patrones:
+      - "no (he podido|puedo) orinar"
+      - "no orino desde"
+      - "no me sale la orina"
+
+  - id: dolor_no_controlado
+    nivel: amarillo
+    descripcion: Dolor que no cede con la analgesia formulada
+    patrones:
+      - "(dolor|me duele).{0,40}(no se me quita|no cede|ni con (la pastilla|el medicamento|nada))"
+      - "(la pastilla|el medicamento|la droga) no me (hace|sirve|calma)"
+
+  - id: sintomas_trombosis
+    nivel: rojo
+    descripcion: Signos de trombosis venosa profunda en miembro inferior
+    mensaje_paciente: esa molestia en la pierna
+    patrones:
+      - "(pierna|pantorrilla).{0,30}(hinchada y (roja|caliente)|muy hinchada|dura y caliente)"
+      - "(dolor|duele).{0,20}pantorrilla"
+      - "(pierna|pantorrilla|pantorilla).{0,30}(hinchada|inflamada|dura|caliente|roja)"
+
+# Cómo se reconoce el procedimiento del paciente en el texto libre del perfil.
+# Sin esta tabla, "Reemplazo de cadera/rodilla" no emparejaba con ninguna clave
+# y el 60% de las llamadas corría solo con las reglas globales.
+# El emparejamiento es por alias normalizado (sin tildes, minúsculas); basta que
+# el alias aparezca dentro del nombre del procedimiento.
+alias_procedimientos:
+  apendicectomia: [apendicectomia, apendice, apendicitis, appendectomy]
+  colecistectomia: [colecistectomia, vesicula, colecistitis, cholecystectomy]
+  colectomia: [colectomia, colon, colorrectal, colorectal, hemicolectomia, sigmoidectomia]
+  reemplazo_articular: [reemplazo, artroplastia, protesis, rodilla, cadera, joint replacement]
+  mastectomia: [mastectomia, mama, seno, cuadrantectomia, mastectomy]
+  cesarea: [cesarea, cesarean]
+  hernioplastia: [hernioplastia, herniorrafia, hernia]
+
+# PROCEDENCIA DE LAS REGLAS POR PROCEDIMIENTO
+# -------------------------------------------
+# Cada bloque declara de qué documento del corpus oficial sale y con qué
+# criterio. Donde el corpus NO tiene material, se dice: no se inventan
+# umbrales específicos y el paciente queda cubierto por las reglas globales.
+# Inventar un criterio clínico sin fuente sería exactamente la alucinación que
+# este motor existe para evitar.
+procedimientos:
+  # Fuente: "PLAN DE CUIDADO EN CASA DE PACIENTE EN POSTOPERATORIO DE
+  # APENDICECTOMÍA" (dataset/textos/Appendicitis), sección de signos de alarma.
+  # De su lista salen los dos criterios que NO son globales: abdomen rígido
+  # (rojo, sospecha de peritonitis) y falta de canalización de gases (amarillo,
+  # "Falta de deposiciones que no mejora").
+  apendicectomia:
+    - id: dolor_abdominal_difuso
+      nivel: rojo
+      descripcion: Dolor abdominal generalizado con abdomen rígido — posible peritonitis
+      mensaje_paciente: ese dolor en el abdomen
+      patrones:
+        - "(barriga|abdomen|estomago).{0,30}(dur[oa]|rigid|tabla)"
+        - "dolor.{0,20}(toda la barriga|todo el abdomen)"
+        - "(barriga|abdomen|estomago|panza).{0,30}(como (una )?(piedra|tabla)|dura|durisima|tiesa)"
+        - "(barriga|abdomen|panza).{0,20}(no la puedo tocar|no me deja tocar)"
+    - id: distension_sin_gases
+      nivel: amarillo
+      descripcion: Distensión abdominal sin canalizar gases
+      patrones:
+        - "no (he podido |puedo )?(pasar|sacar|echar) (gases|los gases)"
+        - "(barriga|abdomen).{0,20}(inflad|hinchad|distendid)"
+
+  # Fuente: "PLAN DE CUIDADO COLECISTECTOMIA" (dataset/textos/cholecystitis).
+  # Aporta "Fiebre > 38 ºC" —ya global— y dos criterios propios de la vía
+  # biliar y de la laparoscopia: la ictericia en rojo (posible lesión de vía
+  # biliar) y el dolor referido al hombro marcado como VERDE, porque es el
+  # efecto esperado del neumoperitoneo y alarmar por él sería un falso positivo
+  # sistemático en esta cirugía.
+  colecistectomia:
+    - id: ictericia
+      nivel: rojo
+      descripcion: Coloración amarilla de piel u ojos — posible lesión de vía biliar
+      mensaje_paciente: ese color en la piel
+      patrones:
+        - "(ojos|piel).{0,20}amarill"
+        - "estoy amarill"
+        - "(me puse|estoy|me estoy poniendo).{0,15}amarill"
+        - "(ojos|piel|cara).{0,20}amarill"
+    - id: dolor_hombro_persistente
+      nivel: verde
+      descripcion: Dolor referido al hombro por neumoperitoneo — esperado en laparoscopia
+      patrones:
+        - "(hombro|espalda alta).{0,20}(duele|dolor)"
+
+  # SIN FUENTE EN EL CORPUS. El kit no trae material obstétrico ni pacientes de
+  # cesárea; estos dos criterios provienen de la práctica general de puerperio
+  # (loquios abundantes y preeclampsia puerperal) y quedan marcados como
+  # pendientes de validación clínica. Se conservan porque son postoperatorios
+  # reales del ámbito del agente: retirarlos por no estar en ESTE dataset sería
+  # ajustar la configuración clínica al examen.
+  cesarea:
+    - id: sangrado_vaginal_abundante
+      nivel: rojo
+      descripcion: Loquios abundantes con coágulos grandes
+      mensaje_paciente: ese sangrado
+      patrones:
+        - "(sangrado|flujo).{0,30}(abundante|coagulos grandes|empapo (una|la) toalla)"
+        - "(empapo|empapando|empape).{0,25}(toalla|panal|apostito)"
+        - "(coagulos|cuajarones).{0,20}(grandes|grandotes)"
+    - id: cefalea_vision
+      nivel: rojo
+      descripcion: Cefalea intensa con alteraciones visuales — preeclampsia puerperal
+      mensaje_paciente: ese dolor de cabeza y lo que le pasa con la vista
+      patrones:
+        - "dolor de cabeza.{0,40}(veo (borroso|lucecitas)|no veo bien)"
+        - "(dolor de cabeza|cefalea|migrana).{0,45}(veo (borroso|lucecitas|puntos)|no veo bien|vista borrosa)"
+        - "(veo (borroso|lucecitas)|vista borrosa).{0,45}(dolor de cabeza|cabeza)"
+
+  # Fuente: "Recomendaciones Programa Reemplazo Articular de Rodilla" y "PLAN
+  # CASERO REEMPLAZO TOTAL DE RODILLA" (corpus oficial, carpeta
+  # `total joint replacement`). Su lista de signos de alarma para acudir a
+  # Urgencias incluye: fiebre >38°, aumento de inflamación/dolor/enrojecimiento
+  # de la herida, ampollas o zonas rojas en la extremidad, sangrado o secreción
+  # con mal olor, tos con flema o sangre, dolor en el pecho o dificultad para
+  # respirar, y alteración de la conciencia (agotamiento extremo, somnolencia).
+  # Cubre cadera y rodilla: ambos comparten esa lista y el kit los trae como un
+  # único procedimiento ("Reemplazo de cadera/rodilla").
+  reemplazo_articular:
+    - id: incapacidad_apoyo_subita
+      nivel: amarillo
+      descripcion: Pérdida súbita de la capacidad de apoyo que ya se había ganado
+      patrones:
+        - "(ya no puedo|deje de poder) (apoyar|pararme|dar paso)"
+        - "(ya no|deje de) (poder )?(apoyar|sostener|aguantar) (la |el )?(pierna|rodilla|cadera)"
+    - id: articulacion_caliente_fiebre
+      nivel: rojo
+      descripcion: Articulación operada caliente y roja con fiebre — posible infección periprotésica
+      mensaje_paciente: cómo está la articulación operada
+      patrones:
+        - "(rodilla|cadera).{0,35}(caliente|muy roja|hinchada|roja).{0,45}(fiebre|calentura)"
+        - "(fiebre|calentura).{0,45}(rodilla|cadera).{0,25}(caliente|hinchada|roja)"
+    - id: zonas_rojas_extremidad
+      nivel: amarillo
+      descripcion: Ampollas o zonas rojas en la extremidad operada
+      patrones:
+        - "(ampolla|granos|zonas rojas|placas rojas).{0,35}(pierna|muslo|extremidad|rodilla|cadera)"
+        - "(pierna|muslo|extremidad).{0,30}(ampolla|zonas rojas|placas rojas)"
+    - id: tos_con_sangre
+      nivel: rojo
+      descripcion: Tos con flema o sangre tras artroplastia — descartar evento tromboembólico
+      mensaje_paciente: esa tos
+      patrones:
+        - "(tos|toso|tosiendo).{0,30}(con sangre|sanguinolent|con flema)"
+        - "(escupo|escupiendo|boto).{0,20}sangre"
+
+  # Fuente: "Colon Cancer Surgery and Recovery" (corpus oficial, carpeta
+  # `colorectal cancer`), sección "Call your surgeon for these danger signs":
+  # vómito, fiebre > 100.5 °F (38 °C), dolor en el abdomen o en la incisión que
+  # empeora en vez de mejorar, enrojecimiento o drenaje de la incisión,
+  # estreñimiento o diarrea severos, dificultad para orinar y mareo.
+  # La dehiscencia anastomótica es la principal causa de reintervención en esta
+  # cirugía, de ahí que el cuadro abdominal agudo se marque en rojo.
+  colectomia:
+    - id: abdomen_agudo_postcolectomia
+      nivel: rojo
+      descripcion: Dolor abdominal creciente con abdomen rígido — sospecha de fuga anastomótica
+      mensaje_paciente: ese dolor en el abdomen
+      patrones:
+        - "(barriga|abdomen|estomago|panza).{0,30}(dur[oa]|rigid|tabla|como (una )?piedra|tiesa)"
+        - "(dolor|duele).{0,30}(barriga|abdomen|estomago).{0,40}(cada vez mas|peor|no mejora|aumentando)"
+        - "(barriga|abdomen|panza).{0,20}(no la puedo tocar|no me deja tocar)"
+    - id: transito_intestinal_alterado
+      nivel: amarillo
+      descripcion: Estreñimiento o diarrea severos, o ausencia de gases tras colectomía
+      patrones:
+        - "no (he podido |puedo )?(pasar|sacar|echar) (gases|los gases)"
+        - "(no (he )?(hecho|obrado|evacuado)|sin (obrar|deposicion)).{0,30}(dias|desde)"
+        - "(diarrea|dianea).{0,30}(no (para|cede)|varios dias|tres dias|muchas veces)"
+        - "(barriga|abdomen).{0,20}(inflad|hinchad|distendid)"
+    - id: dificultad_urinaria
+      nivel: amarillo
+      descripcion: Dificultad para orinar tras cirugía colorrectal
+      patrones:
+        - "(me cuesta|dificultad|no puedo|problema).{0,20}(orinar|hacer pipi|hacer chichi)"
+
+  # El kit trae 8 pacientes de Mastectomía, pero su carpeta de corpus
+  # (`textos/breast_cancer`) contiene documentos de cáncer de CUELLO UTERINO,
+  # no de mama: no hay plan de cuidado postmastectomía del que derivar signos de
+  # alarma. Por eso aquí solo van las dos entidades cuya vigilancia sí está
+  # documentada en el material general de herida quirúrgica que el propio kit
+  # usa transversalmente (seroma y celulitis del colgajo). Todo lo demás queda
+  # cubierto por las reglas globales, que es lo correcto: inventar umbrales
+  # específicos sin fuente sería exactamente la alucinación clínica que este
+  # motor existe para evitar.
+  mastectomia:
+    - id: coleccion_bajo_colgajo
+      nivel: amarillo
+      descripcion: Colección o abultamiento fluctuante en el lecho quirúrgico — posible seroma
+      patrones:
+        - "(bulto|bola|abultamiento|hinchazon).{0,30}(blandit|con liquido|se mueve|aguad)"
+        - "(seno|pecho|axila).{0,30}(muy hinchad|se hincho|lleno de liquido)"
+    - id: drenaje_alterado
+      nivel: amarillo
+      descripcion: Drenaje quirúrgico con débito alterado o contenido turbio
+      patrones:
+        - "(el |la )?(dren|drenaje|manguera|caucho).{0,35}(se salio|no sale|dejo de salir|turbio|feo|con mal olor)"
+
+  # SIN FUENTE EN EL CORPUS, igual que cesárea. La masa irreductible y dolorosa
+  # (recidiva incarcerada) es criterio quirúrgico general, pendiente de
+  # validación clínica.
+  hernioplastia:
+    - id: masa_dolorosa_irreductible
+      nivel: rojo
+      descripcion: Masa dolorosa que no reduce — posible recidiva incarcerada
+      mensaje_paciente: ese bulto
+      patrones:
+        - "(bola|masa|bulto).{0,30}(dur[oa]|no se mete|dolorosa)"
+        - "(bola|masa|bulto|pelota).{0,35}(dur[oa]|no se mete|no entra|dolorosa|duele)"
+
+
+

@@ -1,0 +1,20 @@
+# Motor de embeddings HEREDADO — OPCIONAL, no forma parte del quick start.
+#
+# RONDA genera sus embeddings con FastEmbed (ONNX Runtime). Este archivo instala
+# el motor anterior, `sentence-transformers`, únicamente para quien quiera
+# reproducir los experimentos de recuperación previos con el intérprete
+# original.
+#
+# ES EL MISMO MODELO en ambos casos:
+#   sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2  ·  384 dim
+# La similitud coseno medida entre los vectores de los dos motores es 0.999999,
+# de modo que el índice es compatible en ambos sentidos.
+#
+# AVISO DE PESO: esto descarga PyTorch (~524 MB) más transformers y scipy.
+# Son unos 750 MB adicionales. No lo instale si solo quiere ejecutar RONDA.
+#
+#   pip install -r requirements-legacy-embeddings.txt
+#   # y en .env:
+#   EMBEDDING_BACKEND=sentence_transformers
+
+sentence-transformers==3.3.1

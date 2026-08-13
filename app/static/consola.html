@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RONDA — Consola de conocimiento vivo</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">R O N D A <span>●</span></div>
+    <div style="flex:1"></div>
+    <nav>
+      <a href="/">Llamada</a>
+      <a href="/consola" class="activo">Consola</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>Conocimiento vivo</h2>
+        <div class="fila-acciones">
+          <input type="file" id="archivo" accept=".pdf,.txt,.md" />
+          <button id="btnSubir">Subir documento</button>
+        </div>
+        <p class="aviso">
+          Al subir, el agente lo aprende (badge <span class="badge disponible">disponible</span>).
+          Al eliminar, lo olvida de verdad: borrado duro de vectores + tombstone en el
+          manifiesto. Use <b>Verificar olvido</b> para la prueba observable.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Documento</th><th>Estado</th><th>Chunks</th><th>Extracción</th><th></th></tr>
+          </thead>
+          <tbody id="tablaDocs"></tbody>
+        </table>
+        <pre class="json" id="salidaVerificacion" style="display:none;"></pre>
+      </section>
+
+      <aside style="display:flex; flex-direction:column; gap:18px;">
+        <section class="card">
+          <h2>Alertas de escalamiento</h2>
+          <table>
+            <thead><tr><th>Paciente</th><th>Nivel</th><th>Hora</th><th></th></tr></thead>
+            <tbody id="tablaAlertas"></tbody>
+          </table>
+        </section>
+        <section class="card">
+          <h2>Actas de llamada</h2>
+          <table>
+            <thead><tr><th>Paciente</th><th>Criticidad</th><th></th></tr></thead>
+            <tbody id="tablaActas"></tbody>
+          </table>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <dialog id="dlgDetalle">
+    <h2 style="margin-bottom:10px;" id="dlgTitulo">Detalle</h2>
+    <pre class="json" id="dlgJson"></pre>
+    <div class="fila-acciones">
+      <button onclick="document.getElementById('dlgDetalle').close()">Cerrar</button>
+    </div>
+  </dialog>
+
+  <script src="/static/consola.js"></script>
+</body>
+</html>

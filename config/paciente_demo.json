@@ -1,0 +1,10 @@
+{
+  "paciente_id": "demo-001",
+  "nombre": "Carlos Ramírez",
+  "edad": 52,
+  "procedimiento": "apendicectomia",
+  "procedimiento_nombre": "apendicectomía laparoscópica",
+  "dia_postoperatorio": 3,
+  "comorbilidades": ["hipertensión arterial"],
+  "nota": "Paciente sintético de demostración. Reemplázalo con un paciente real del dataset (perfiles_clinicos_pacientes_silver_contest.xlsx) para el video."
+}

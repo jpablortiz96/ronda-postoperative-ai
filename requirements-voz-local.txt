@@ -1,0 +1,11 @@
+# Voz local OPCIONAL (motor Piper). Deliberadamente fuera de requirements.txt:
+# el levantamiento base de RONDA no debe pagar este coste (compuerta G2).
+#
+#   pip install -r requirements-voz-local.txt
+#   python scripts/preparar_voz_local.py
+#
+# Coste medido sobre un entorno que ya tiene requirements.txt instalado:
+# onnxruntime, numpy y protobuf YA están (los trae chromadb), así que lo
+# único nuevo son estos dos paquetes.
+piper-tts==1.6.0
+pathvalidate==3.3.1

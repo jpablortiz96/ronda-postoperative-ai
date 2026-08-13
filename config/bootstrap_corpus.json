@@ -1,0 +1,60 @@
+{
+  "_comentario": [
+    "Semilla de conocimiento de RONDA. Estos seis documentos NO se redistribuyen",
+    "en este repositorio: pertenecen al kit oficial del Tech Sphere Challenge 2026",
+    "y conservan los derechos de sus autores. Aquí solo se declara DÓNDE están y",
+    "CUÁL es su huella, para que el script de arranque los descargue del origen",
+    "oficial y verifique que son exactamente los mismos con los que se midió el",
+    "sistema.",
+    "El sha256 no es decorativo: si el archivo remoto cambia, el bootstrap avisa",
+    "en vez de indexar en silencio algo distinto de lo evaluado."
+  ],
+  "upstream_repo": "https://github.com/TechSphere2026/ParticipantArtifacts",
+  "upstream_ref": "main",
+  "base_url": "https://raw.githubusercontent.com/TechSphere2026/ParticipantArtifacts/main/",
+  "documentos": [
+    {
+      "title": "PLAN DE CUIDADO EN CASA DE PACIENTE EN POSTOPERATORIO DE APENDICECTOMÍA.pdf",
+      "upstream_path": "dataset/textos/Appendicitis/PLAN DE CUIDADO EN CASA DE PACIENTE EN POSTOPERATORIO DE APENDICECTOMÍA.pdf",
+      "sha256": "a875c36fc1f43534caa55f9c6bea6aa4d0d3cdf9b91c43a8f131b60d7f9c61f7",
+      "bytes": 2042924,
+      "procedimiento": "apendicectomia"
+    },
+    {
+      "title": "POST OPERATIVE INSTRUCTIONS FOR APPENDECTOMY .pdf",
+      "upstream_path": "dataset/textos/Appendicitis/POST OPERATIVE INSTRUCTIONS FOR APPENDECTOMY .pdf",
+      "sha256": "58ebe8bb5a180358d4d63d7176e5c738c0d9be60a0b83203cea6f60c3bd62573",
+      "bytes": 197113,
+      "procedimiento": "apendicectomia"
+    },
+    {
+      "title": "PLAN DE CUIDADO COLECISTECTOMIA.pdf",
+      "upstream_path": "dataset/textos/cholecystitis/PLAN DE CUIDADO COLECISTECTOMIA.pdf",
+      "sha256": "2b018dd856f7dfb54508552782466cf7c09cb0e5d7680ca1109bd8be444f0c9f",
+      "bytes": 1105187,
+      "procedimiento": "colecistectomia"
+    },
+    {
+      "title": "Colon Cancer Surgery and Recovery.pdf",
+      "upstream_path": "dataset/textos/colorectal cancer/Colon Cancer Surgery and Recovery.pdf",
+      "sha256": "575d77d1598a9295eee10f704825b481488d5cfab30ff11079ecce1195d3e232",
+      "bytes": 767401,
+      "procedimiento": "colorrectal"
+    },
+    {
+      "title": "PLAN CASERO REEMPLAZO TOTAL DE RODILLA.pdf",
+      "upstream_path": "dataset/textos/total joint replacement/PLAN CASERO REEMPLAZO TOTAL DE RODILLA.pdf",
+      "sha256": "98f6f3f6e66f409939705b5f736cb84515da0b114eb6100900cb4289e8ceb514",
+      "bytes": 1329382,
+      "procedimiento": "reemplazo_articular"
+    },
+    {
+      "title": "Recom endaciones Programa Reemplazo Articular de Rodilla.pdf",
+      "upstream_path": "dataset/textos/total joint replacement/Recom endaciones Programa Reemplazo Articular de Rodilla.pdf",
+      "sha256": "1d0003b99f06cfc29af3ec75d92d58c109d9a85cdda1c700564c1e93268c70e0",
+      "bytes": 1666344,
+      "procedimiento": "reemplazo_articular"
+    }
+  ],
+  "consulta_de_verificacion": "cuidados de la herida en casa despues de la cirugia"
+}

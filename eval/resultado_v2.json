@@ -1,0 +1,894 @@
+{
+  "modo": "V2-DETERMINISTIC (texto + numérico + histórico, SIN LLM)",
+  "conversaciones": 64,
+  "global": {
+    "matriz": {
+      "verde->verde": 31,
+      "verde->amarillo": 15,
+      "verde->rojo": 4,
+      "amarillo->verde": 2,
+      "amarillo->amarillo": 2,
+      "amarillo->rojo": 6,
+      "rojo->verde": 0,
+      "rojo->amarillo": 1,
+      "rojo->rojo": 3
+    },
+    "total": 64,
+    "por_clase": {
+      "verde": {
+        "soporte": 50,
+        "tp": 31,
+        "fn": 19,
+        "fp": 2,
+        "recall": 0.62,
+        "precision": 0.9393939393939394,
+        "f1": 0.7469879518072288
+      },
+      "amarillo": {
+        "soporte": 10,
+        "tp": 2,
+        "fn": 8,
+        "fp": 16,
+        "recall": 0.2,
+        "precision": 0.1111111111111111,
+        "f1": 0.14285714285714285
+      },
+      "rojo": {
+        "soporte": 4,
+        "tp": 3,
+        "fn": 1,
+        "fp": 10,
+        "recall": 0.75,
+        "precision": 0.23076923076923078,
+        "f1": 0.3529411764705882
+      }
+    },
+    "accuracy": 0.5625,
+    "macro_f1": 0.41426209037831996,
+    "asimetria": {
+      "rojo->verde": 0,
+      "rojo->amarillo": 1,
+      "amarillo->verde": 2,
+      "verde->rojo": 4
+    }
+  },
+  "por_capa": {
+    "capa1_limpia": {
+      "matriz": {
+        "verde->verde": 15,
+        "verde->amarillo": 7,
+        "verde->rojo": 3,
+        "amarillo->verde": 1,
+        "amarillo->amarillo": 1,
+        "amarillo->rojo": 3,
+        "rojo->verde": 0,
+        "rojo->amarillo": 0,
+        "rojo->rojo": 2
+      },
+      "total": 32,
+      "por_clase": {
+        "verde": {
+          "soporte": 25,
+          "tp": 15,
+          "fn": 10,
+          "fp": 1,
+          "recall": 0.6,
+          "precision": 0.9375,
+          "f1": 0.7317073170731707
+        },
+        "amarillo": {
+          "soporte": 5,
+          "tp": 1,
+          "fn": 4,
+          "fp": 7,
+          "recall": 0.2,
+          "precision": 0.125,
+          "f1": 0.15384615384615385
+        },
+        "rojo": {
+          "soporte": 2,
+          "tp": 2,
+          "fn": 0,
+          "fp": 6,
+          "recall": 1.0,
+          "precision": 0.25,
+          "f1": 0.4
+        }
+      },
+      "accuracy": 0.5625,
+      "macro_f1": 0.42851782363977486,
+      "asimetria": {
+        "rojo->verde": 0,
+        "rojo->amarillo": 0,
+        "amarillo->verde": 1,
+        "verde->rojo": 3
+      }
+    },
+    "capa2_ruidosa": {
+      "matriz": {
+        "verde->verde": 16,
+        "verde->amarillo": 8,
+        "verde->rojo": 1,
+        "amarillo->verde": 1,
+        "amarillo->amarillo": 1,
+        "amarillo->rojo": 3,
+        "rojo->verde": 0,
+        "rojo->amarillo": 1,
+        "rojo->rojo": 1
+      },
+      "total": 32,
+      "por_clase": {
+        "verde": {
+          "soporte": 25,
+          "tp": 16,
+          "fn": 9,
+          "fp": 1,
+          "recall": 0.64,
+          "precision": 0.9411764705882353,
+          "f1": 0.7619047619047621
+        },
+        "amarillo": {
+          "soporte": 5,
+          "tp": 1,
+          "fn": 4,
+          "fp": 9,
+          "recall": 0.2,
+          "precision": 0.1,
+          "f1": 0.13333333333333333
+        },
+        "rojo": {
+          "soporte": 2,
+          "tp": 1,
+          "fn": 1,
+          "fp": 4,
+          "recall": 0.5,
+          "precision": 0.2,
+          "f1": 0.28571428571428575
+        }
+      },
+      "accuracy": 0.5625,
+      "macro_f1": 0.3936507936507937,
+      "asimetria": {
+        "rojo->verde": 0,
+        "rojo->amarillo": 1,
+        "amarillo->verde": 1,
+        "verde->rojo": 1
+      }
+    }
+  },
+  "falsos_negativos_rojo": [
+    {
+      "caso_id": "caso_tray_pac_42_00028_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00028",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "rojo",
+      "prediccion": "amarillo",
+      "traza": [
+        {
+          "turno_idx": 1,
+          "hablante": "paciente",
+          "texto": "Ay, pues no ha sido tan grave, algo de dolor ahí en la cadera, será un 5 más o menos, pero uno aguanta, no se preocupe. parcero",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "verde",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "verde",
+          "reglas": [],
+          "valores": {
+            "dolor_0_10": 5.0
+          },
+          "nivel_max_tras_turno": "verde"
+        },
+        {
+          "turno_idx": 3,
+          "hablante": "paciente",
+          "texto": "Pues [inaudible] me [inaudible] sen- un poco calientica, la tomé y marcaba como [inaudible] y algo, pero yo creo que [inaudible] [inaudible] calor de [inaudible] casa, no le he puesto mucho cuidado.",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "verde",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "verde",
+          "reglas": [],
+          "valores": {},
+          "nivel_max_tras_turno": "verde"
+        },
+        {
+          "turno_idx": 5,
+          "hablante": "paciente",
+          "texto": "Ay no, en eso sí estoy bien, camino normal, sin problema, ahí me muevo tranquila por la casa.",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "verde",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "verde",
+          "reglas": [],
+          "valores": {},
+          "nivel_max_tras_turno": "verde"
+        },
+        {
+          "turno_idx": 7,
+          "hablante": "paciente",
+          "texto": "Pues sí le sale un poquito de líquido ahí, como amarillito, pero no es mucho, yo creo que es normal de la sanada, no me preocupa mucho.",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "amarillo",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "amarillo",
+          "reglas": [
+            "composicion"
+          ],
+          "valores": {},
+          "nivel_max_tras_turno": "amarillo"
+        },
+        {
+          "turno_idx": 9,
+          "hablante": "paciente",
+          "texto": "Este... no, nada, siga con la otra pregunta.",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "amarillo",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "amarillo",
+          "reglas": [
+            "composicion"
+          ],
+          "valores": {},
+          "nivel_max_tras_turno": "amarillo"
+        },
+        {
+          "turno_idx": 11,
+          "hablante": "paciente",
+          "texto": "Pues duermo poquito, me despierto varias veces en la noche, pero eso es normal a esta edad, no es nada grave, ya cogeré el sueño.",
+          "niveles": {
+            "carril_determinista_texto": "verde",
+            "carril_determinista_numerico": "verde",
+            "carril_determinista_slots": "verde",
+            "carril_composicion": "amarillo",
+            "carril_historico": "verde",
+            "carril_llm": "verde"
+          },
+          "nivel_turno": "amarillo",
+          "reglas": [
+            "composicion"
+          ],
+          "valores": {},
+          "nivel_max_tras_turno": "amarillo"
+        }
+      ]
+    }
+  ],
+  "falsos_positivos_rojo": [
+    {
+      "caso_id": "caso_tray_pac_42_00006_7",
+      "capa": "capa1_limpia",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00006_7",
+      "capa": "capa2_ruidosa",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00009_1",
+      "capa": "capa1_limpia",
+      "label": "verde",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_3",
+      "capa": "capa1_limpia",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_3",
+      "capa": "capa2_ruidosa",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_7",
+      "capa": "capa1_limpia",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_7",
+      "capa": "capa2_ruidosa",
+      "label": "amarillo",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00027_1",
+      "capa": "capa1_limpia",
+      "label": "verde",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_1",
+      "capa": "capa1_limpia",
+      "label": "verde",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_1",
+      "capa": "capa2_ruidosa",
+      "label": "verde",
+      "prediccion": "rojo",
+      "reglas": [
+        "composicion"
+      ]
+    }
+  ],
+  "coste": {
+    "llamadas": 0,
+    "in": 0,
+    "out": 0,
+    "duracion_s": 0.5,
+    "costo_usd": 0.0
+  },
+  "detalle": [
+    {
+      "caso_id": "caso_tray_pac_42_00004_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00004",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00004_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00004",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00004_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00004",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00004_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00004",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00005_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00005",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00005_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00005",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00006_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00006",
+      "procedimiento": "Colecistectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00006_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00006",
+      "procedimiento": "Colecistectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00008_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00008",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00008_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00008",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00009_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00009",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00009_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00009",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00010_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00010",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00010_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00010",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00014_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00014",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00014_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00014",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00015_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00015",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00016_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00016",
+      "procedimiento": "Colecistectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00016_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00016",
+      "procedimiento": "Colecistectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00017_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00017",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00017_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00017",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00018_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00018",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00018_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00018",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00019_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00019",
+      "procedimiento": "Mastectomía",
+      "label": "amarillo",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00019_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00019",
+      "procedimiento": "Mastectomía",
+      "label": "amarillo",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00020_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00020",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00022_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00022",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00022_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00022",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00025_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00025",
+      "procedimiento": "Apendicectomía",
+      "label": "amarillo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00027_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00027",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00027_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00027",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00028_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00028",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "rojo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00028_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00028",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "rojo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00028_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00028",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "rojo",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00028_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00028",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "rojo",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00029",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00029",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "rojo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00029",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00029_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00029",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00033_7",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00033",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00033_7",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00033",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00034_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00034",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00034_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00034",
+      "procedimiento": "Mastectomía",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00037_3",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00037",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00037_3",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00037",
+      "procedimiento": "Colectomía",
+      "label": "verde",
+      "prediccion": "amarillo"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00038_1",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00038",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00038_1",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00038",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00038_14",
+      "capa": "capa1_limpia",
+      "paciente_id": "pac_42_00038",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    },
+    {
+      "caso_id": "caso_tray_pac_42_00038_14",
+      "capa": "capa2_ruidosa",
+      "paciente_id": "pac_42_00038",
+      "procedimiento": "Reemplazo de cadera/rodilla",
+      "label": "verde",
+      "prediccion": "verde"
+    }
+  ]
+}
